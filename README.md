@@ -3,6 +3,6 @@
 ### Requirements
 - pygame
 Install:
-´´´
+```
 pip install pygame
-´´´
+```
