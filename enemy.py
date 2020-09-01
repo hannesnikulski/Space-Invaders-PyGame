@@ -58,7 +58,6 @@ class Enemy:
 
                     return True
 
-
 class Invader:
     def __init__(self, x, y):
         self.x = x
