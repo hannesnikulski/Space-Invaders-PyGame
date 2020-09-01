@@ -7,12 +7,27 @@ from widgets import Button
 from pygame.locals import K_p, KEYDOWN
 
 
+class GameStateManager:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+        self.play = PlayState(self.width, self.height, self)
+        self.pause = PauseState(self.width, self.height, self)
+        self.game_over = GameOverState(self.width, self.height, self)
+        self.menu = MenuState(self.width, self.height, self)
+
+        self.active = self.menu
+
+        self.close = False
+
+
 class PlayState:
-    def __init__(self, w, h, parent):
+    def __init__(self, w, h, gsm):
         self.width = w
         self.height = h
 
-        self.parent = parent
+        self.gsm = gsm
 
         self.font = pygame.font.SysFont('Source Code Pro', 24)
 
@@ -49,17 +64,18 @@ class PlayState:
         screen.blit(textsurface, (0, 0))
 
     def pause(self):
-        self.parent.active_state = self.parent.pause_state
+        self.gsm.active = self.gsm.pause
 
     def game_over(self):
-        self.parent.active_state = self.parent.game_over_state
+        self.gsm.active = self.gsm.game_over
+
 
 class PauseState:
-    def __init__(self, w, h, parent):
+    def __init__(self, w, h, gsm):
         self.width = w
         self.height = h
 
-        self.parent = parent
+        self.gsm = gsm
 
         self.font = pygame.font.SysFont('Source Code Pro', 50)
 
@@ -85,18 +101,18 @@ class PauseState:
         screen.blit(textsurface, text_rect)
 
     def resume(self):
-        self.parent.active_state = self.parent.play_state
+        self.gsm.active = self.gsm.play
 
     def menu(self):
-        self.parent.active_state = self.parent.menu_state
+        self.gsm.active = self.gsm.menu
 
 
 class MenuState:
-    def __init__(self, w, h, parent):
+    def __init__(self, w, h, gsm):
         self.width = w
         self.height = h
 
-        self.parent = parent
+        self.gsm = gsm
 
         self.font = pygame.font.SysFont('Source Code Pro', 50)
 
@@ -122,19 +138,19 @@ class MenuState:
         screen.blit(textsurface, text_rect)
 
     def play(self):
-        self.parent.play_state = PlayState(self.width, self.height, self.parent)
-        self.parent.active_state = self.parent.play_state
+        self.gsm.play = PlayState(self.width, self.height, self.gsm)
+        self.gsm.active = self.gsm.play
 
     def close(self):
-        self.parent.close()
+        self.gsm.close = True
 
 
 class GameOverState:
-    def __init__(self, w, h, parent):
+    def __init__(self, w, h, gsm):
         self.width = w
         self.height = h
 
-        self.parent = parent
+        self.gsm = gsm
 
         self.font = pygame.font.SysFont('Source Code Pro', 24)
 
@@ -159,4 +175,4 @@ class GameOverState:
         screen.blit(textsurface, text_rect)
  
     def menu(self):
-        self.parent.active_state = self.parent.menu_state
+        self.gsm.active = self.gsm.menu

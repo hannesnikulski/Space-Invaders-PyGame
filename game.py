@@ -2,7 +2,7 @@ import sys
 import pygame
 
 from pygame.locals import QUIT
-from states import MenuState, PlayState, PauseState, GameOverState
+from states import GameStateManager
 
 
 class Game:
@@ -10,12 +10,7 @@ class Game:
         self.width = w
         self.height = h
 
-        self.menu_state = MenuState(self.width, self.height, self)
-        self.play_state = PlayState(self.width, self.height, self)
-        self.pause_state = PauseState(self.width, self.height, self)
-        self.game_over_state = GameOverState(self.width, self.height, self)
-
-        self.active_state = self.menu_state
+        self.gsm = GameStateManager(self.width, self.height)
 
         self.fps = 60
         self.clock = pygame.time.Clock()
@@ -28,13 +23,17 @@ class Game:
             if event.type == QUIT:
                 self.close()
 
-            self.active_state.event(event)
+            self.gsm.active.event(event)
 
     def update(self):
-        self.active_state.update()
+        if self.gsm.close:
+            self.close()
+
+        self.gsm.active.update()
+
 
     def render(self, screen):
-        self.active_state.render(screen)
+        self.gsm.active.render(screen)
 
     def run(self):
         while True:
