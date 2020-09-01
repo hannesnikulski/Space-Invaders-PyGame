@@ -1,8 +1,9 @@
 # Space-Invaders-PyGame
-===
+A small python game.
 ### Requirements
 - pygame
-Install:
+
+How to install requirements:
 ```
 pip install pygame
 ```
