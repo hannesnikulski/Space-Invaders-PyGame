@@ -2,7 +2,7 @@ import pygame
 
 from player import Player
 from enemy import Enemy
-from widgets import Button
+from widgets import Button, Text
 
 from pygame.locals import K_p, KEYDOWN
 
@@ -101,7 +101,8 @@ class PauseState:
 
         self.widgets = [
             Button(self.width // 2, self.height // 2, 250, 75, 'Resume', self.gsm.play),
-            Button(self.width // 2, self.height // 2 + 100, 250, 75, 'Menu', self.gsm.menu)
+            Button(self.width // 2, self.height // 2 + 100, 250, 75, 'Menu', self.gsm.menu),
+            Text(self.width // 2, self.height // 3, 'Pause', (255, 255, 255))
         ]
 
     def event(self, event: pygame.event.EventType) -> None:
@@ -118,10 +119,6 @@ class PauseState:
         for widget in self.widgets:
             widget.render(screen)
 
-        textsurface = self.font.render('Pause', False, (255, 255, 255))
-        text_rect = textsurface.get_rect(center=(self.width // 2, self.height // 3))
-        screen.blit(textsurface, text_rect)
-
 
 class MenuState:
     def __init__(self, w, h, gsm):
@@ -134,7 +131,8 @@ class MenuState:
 
         self.widgets = [
             Button(self.width // 2, self.height // 2, 250, 75, 'Play', self.gsm.play),
-            Button(self.width // 2, self.height // 2 + 100, 250, 75, 'Quit', self.gsm.stop)
+            Button(self.width // 2, self.height // 2 + 100, 250, 75, 'Quit', self.gsm.stop),
+            Text(self.width // 2, self.height // 3, 'Space Invaders', (255, 255, 255))
         ]
 
     def event(self, event):
@@ -148,10 +146,6 @@ class MenuState:
     def render(self, screen):
         for widget in self.widgets:
             widget.render(screen)
-
-        textsurface = self.font.render('Space Invaders', False, (255, 255, 255))
-        text_rect = textsurface.get_rect(center=(self.width // 2, self.height // 3))
-        screen.blit(textsurface, text_rect)
 
 
 class GameOverState:
@@ -164,7 +158,8 @@ class GameOverState:
         self.font = pygame.font.SysFont('Source Code Pro', 24)
 
         self.widgets = [
-            Button(self.width // 2, self.height // 2, 250, 75, 'Menu', self.gsm.menu)
+            Button(self.width // 2, self.height // 2, 250, 75, 'Menu', self.gsm.menu),
+            Text(self.width // 2, self.height // 3, 'Game Over!', (255, 255, 255))
         ]
 
     def event(self, event):
@@ -180,10 +175,6 @@ class GameOverState:
 
         for widget in self.widgets:
             widget.render(screen)
-
-        textsurface = self.font.render('Game Over', False, (255, 255, 255))
-        text_rect = textsurface.get_rect(center=(self.width // 2, self.height // 3))
-        screen.blit(textsurface, text_rect)
  
 
 class WinState:
@@ -193,10 +184,9 @@ class WinState:
 
         self.gsm = gsm
 
-        self.font = pygame.font.SysFont('Source Code Pro', 24)
-
         self.widgets = [
-            Button(self.width // 2, self.height // 2, 250, 75, 'Menu', self.gsm.menu)
+            Button(self.width // 2, self.height // 2, 250, 75, 'Menu', self.gsm.menu),
+            Text(self.width // 2, self.height // 3, 'You Won!', (255, 255, 255))
         ]
 
     def event(self, event):
@@ -212,8 +202,3 @@ class WinState:
 
         for widget in self.widgets:
             widget.render(screen)
-
-        textsurface = self.font.render('You Won', False, (255, 255, 255))
-        text_rect = textsurface.get_rect(center=(self.width // 2, self.height // 3))
-        screen.blit(textsurface, text_rect)
- 

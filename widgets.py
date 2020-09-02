@@ -43,3 +43,20 @@ class Button:
 
     def click(self) -> None:
         self.func()
+
+
+class Text:
+    def __init__(self, x, y, text, color):
+        self.font = pygame.font.SysFont('Source Code Pro', 24)
+
+        self.surface = self.font.render(text, False, color)
+        self.rect = self.surface.get_rect(center=(x, y))
+
+    def event(self, event):
+        pass
+
+    def update(self):
+        pass
+
+    def render(self, screen):
+        screen.blit(self.surface, self.rect)

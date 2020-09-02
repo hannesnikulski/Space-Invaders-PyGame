@@ -75,5 +75,5 @@ if __name__ == "__main__":
     pygame.display.set_caption("Space invaders")
     pygame.display.set_icon(pygame.image.load('img/icon.png'))
 
-    game = Game(1920, 1080)
+    game = Game(1280, 720)
     game.run()
