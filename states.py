@@ -12,14 +12,30 @@ class GameStateManager:
         self.width = width
         self.height = height
 
-        self.play = PlayState(self.width, self.height, self)
-        self.pause = PauseState(self.width, self.height, self)
-        self.game_over = GameOverState(self.width, self.height, self)
-        self.menu = MenuState(self.width, self.height, self)
+        self.play_state = PlayState(self.width, self.height, self)
+        self.pause_state = PauseState(self.width, self.height, self)
+        self.game_over_state = GameOverState(self.width, self.height, self)
+        self.menu_state = MenuState(self.width, self.height, self)
 
-        self.active = self.menu
+        self.active = self.menu_state
 
         self.close = False
+
+    def play(self):
+        self.active = self.play_state
+
+    def menu(self):
+        self.active = self.menu_state
+        self.play_state = PlayState(self.width, self.height, self)
+
+    def pause(self) -> None:
+        self.active = self.pause_state
+
+    def game_over(self) -> None:
+        self.active = self.game_over_state
+
+    def stop(self) -> None:
+        self.close = True
 
 
 class PlayState:
@@ -37,7 +53,7 @@ class PlayState:
     def event(self, event: pygame.event.EventType) -> None:
         if event.type == KEYDOWN:
             if event.key == K_p:
-                self.pause()
+                self.gsm.pause()
 
         self.player.event(event)
         self.enemy.event(event)
@@ -49,7 +65,7 @@ class PlayState:
         for invader in self.enemy.invaders:
             if self.player.is_hit(invader.bullets):
                 if self.player.lives == 0:
-                    self.game_over()
+                    self.gsm.game_over()
 
                 break
 
@@ -63,12 +79,6 @@ class PlayState:
         textsurface = self.font.render(f'Score: {self.player.score}, Lives: {self.player.lives}', False, (255, 255, 255))
         screen.blit(textsurface, (0, 0))
 
-    def pause(self) -> None:
-        self.gsm.active = self.gsm.pause
-
-    def game_over(self) -> None:
-        self.gsm.active = self.gsm.game_over
-
 
 class PauseState:
     def __init__(self, w: int, h: int, gsm: GameStateManager) -> None:
@@ -80,8 +90,8 @@ class PauseState:
         self.font = pygame.font.SysFont('Source Code Pro', 50)
 
         self.widgets = [
-            Button(self.width // 2, self.height // 2, 250, 75, 'Resume', self.resume),
-            Button(self.width // 2, self.height // 2 + 100, 250, 75, 'Menu', self.menu)
+            Button(self.width // 2, self.height // 2, 250, 75, 'Resume', self.gsm.play),
+            Button(self.width // 2, self.height // 2 + 100, 250, 75, 'Menu', self.gsm.menu)
         ]
 
     def event(self, event: pygame.event.EventType) -> None:
@@ -100,12 +110,6 @@ class PauseState:
         text_rect = textsurface.get_rect(center=(self.width // 2, self.height // 3))
         screen.blit(textsurface, text_rect)
 
-    def resume(self) -> None:
-        self.gsm.active = self.gsm.play
-
-    def menu(self) -> None:
-        self.gsm.active = self.gsm.menu
-
 
 class MenuState:
     def __init__(self, w, h, gsm):
@@ -117,8 +121,8 @@ class MenuState:
         self.font = pygame.font.SysFont('Source Code Pro', 50)
 
         self.widgets = [
-            Button(self.width // 2, self.height // 2, 250, 75, 'Play', self.play),
-            Button(self.width // 2, self.height // 2 + 100, 250, 75, 'Quit', self.close)
+            Button(self.width // 2, self.height // 2, 250, 75, 'Play', self.gsm.play),
+            Button(self.width // 2, self.height // 2 + 100, 250, 75, 'Quit', self.gsm.stop)
         ]
 
     def event(self, event):
@@ -137,13 +141,6 @@ class MenuState:
         text_rect = textsurface.get_rect(center=(self.width // 2, self.height // 3))
         screen.blit(textsurface, text_rect)
 
-    def play(self):
-        self.gsm.play = PlayState(self.width, self.height, self.gsm)
-        self.gsm.active = self.gsm.play
-
-    def close(self):
-        self.gsm.close = True
-
 
 class GameOverState:
     def __init__(self, w, h, gsm):
@@ -155,7 +152,7 @@ class GameOverState:
         self.font = pygame.font.SysFont('Source Code Pro', 24)
 
         self.widgets = [
-            Button(self.width // 2, self.height // 2, 250, 75, 'Menu', self.menu)
+            Button(self.width // 2, self.height // 2, 250, 75, 'Menu', self.gsm.menu)
         ]
 
     def event(self, event):
@@ -174,5 +171,3 @@ class GameOverState:
         text_rect = textsurface.get_rect(center=(self.width // 2, self.height // 3))
         screen.blit(textsurface, text_rect)
  
-    def menu(self):
-        self.gsm.active = self.gsm.menu
