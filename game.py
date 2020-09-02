@@ -17,7 +17,7 @@ class Game:
 
         self.gsm = GameStateManager(self.width, self.height)
 
-        self.fps = 60
+        self.FPS = 60
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((self.width, self.height))
 
@@ -44,7 +44,6 @@ class Game:
 
         self.gsm.active.update()
 
-
     def render(self) -> None:
         self.gsm.active.render(self.screen)
 
@@ -63,7 +62,7 @@ class Game:
             self.render()
 
             pygame.display.flip()
-            self.clock.tick(self.fps)
+            self.clock.tick(self.FPS)
 
     def close(self) -> None:
         pygame.quit()
@@ -76,5 +75,5 @@ if __name__ == "__main__":
     pygame.display.set_caption("Space invaders")
     pygame.display.set_icon(pygame.image.load('img/icon.png'))
 
-    game = Game(1280, 720)
+    game = Game(1920, 1080)
     game.run()
