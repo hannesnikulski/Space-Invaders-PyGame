@@ -8,7 +8,7 @@ from pygame.locals import K_p, KEYDOWN
 
 
 class GameStateManager:
-    def __init__(self, width, height):
+    def __init__(self, width: int, height: int) -> None:
         self.width = width
         self.height = height
 
@@ -23,7 +23,7 @@ class GameStateManager:
 
 
 class PlayState:
-    def __init__(self, w, h, gsm):
+    def __init__(self, w: int, h: int, gsm: GameStateManager) -> None:
         self.width = w
         self.height = h
 
@@ -34,7 +34,7 @@ class PlayState:
         self.player = Player(self.width // 2, self.height * 0.8, self.width)
         self.enemy = Enemy(self.width, self.height)
         
-    def event(self, event):
+    def event(self, event: pygame.event.EventType) -> None:
         if event.type == KEYDOWN:
             if event.key == K_p:
                 self.pause()
@@ -42,7 +42,7 @@ class PlayState:
         self.player.event(event)
         self.enemy.event(event)
 
-    def update(self):
+    def update(self) -> None:
         if self.enemy.is_hit(self.player.bullets):
             self.player.score += 10
 
@@ -56,22 +56,22 @@ class PlayState:
         self.player.update()
         self.enemy.update()
 
-    def render(self, screen):
+    def render(self, screen: pygame.Surface) -> None:
         self.player.render(screen)
         self.enemy.render(screen)
 
         textsurface = self.font.render(f'Score: {self.player.score}, Lives: {self.player.lives}', False, (255, 255, 255))
         screen.blit(textsurface, (0, 0))
 
-    def pause(self):
+    def pause(self) -> None:
         self.gsm.active = self.gsm.pause
 
-    def game_over(self):
+    def game_over(self) -> None:
         self.gsm.active = self.gsm.game_over
 
 
 class PauseState:
-    def __init__(self, w, h, gsm):
+    def __init__(self, w: int, h: int, gsm: GameStateManager) -> None:
         self.width = w
         self.height = h
 
@@ -84,15 +84,15 @@ class PauseState:
             Button(self.width // 2, self.height // 2 + 100, 250, 75, 'Menu', self.menu)
         ]
 
-    def event(self, event):
+    def event(self, event: pygame.event.EventType) -> None:
         for widget in self.widgets:
             widget.event(event)
 
-    def update(self):
+    def update(self) -> None:
         for widget in self.widgets:
             widget.update()
 
-    def render(self, screen):
+    def render(self, screen: pygame.Surface) -> None:
         for widget in self.widgets:
             widget.render(screen)
 
@@ -100,10 +100,10 @@ class PauseState:
         text_rect = textsurface.get_rect(center=(self.width // 2, self.height // 3))
         screen.blit(textsurface, text_rect)
 
-    def resume(self):
+    def resume(self) -> None:
         self.gsm.active = self.gsm.play
 
-    def menu(self):
+    def menu(self) -> None:
         self.gsm.active = self.gsm.menu
 
 

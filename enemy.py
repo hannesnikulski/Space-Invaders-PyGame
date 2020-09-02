@@ -2,10 +2,11 @@ import random
 import pygame
 
 from bullet import Bullet
+from typing import List
 
 
 class Enemy:
-    def __init__(self, width, height):
+    def __init__(self, width: int, height: int) -> None:
         self.width = width
         self.height = height
 
@@ -14,10 +15,10 @@ class Enemy:
         self.invaders = []
         self.add()
 
-    def event(self, event):
+    def event(self, event: pygame.event.EventType) -> None:
         pass
 
-    def update(self):
+    def update(self) -> None:
         for invader in self.invaders:
             invader.update(self.speed)
         
@@ -32,21 +33,21 @@ class Enemy:
 
         self.remove()
 
-    def render(self, screen):
+    def render(self, screen: pygame.Surface) -> None:
         for invader in self.invaders:
             invader.render(screen)
 
-    def add(self):
+    def add(self) -> None:
         for i in range(1, 10):
             for j in range(1, 3):
                 self.invaders.append(
                     Invader(i * self.width // 10, j * self.height // 10)
                 )
 
-    def remove(self):
+    def remove(self) -> None:
         self.invaders = [invader for invader in self.invaders if not invader.out]
 
-    def is_hit(self, bullets):
+    def is_hit(self, bullets: List[int]) -> bool:
         for bullet in bullets:
             for invader in self.invaders:
                 if invader.y < bullet.y - bullet.size + invader.size[1] // 2 < invader.y + invader.size[1] and \
@@ -59,7 +60,7 @@ class Enemy:
                     return True
 
 class Invader:
-    def __init__(self, x, y):
+    def __init__(self, x: int, y: int) -> None:
         self.x = x
         self.y = y
 
@@ -71,10 +72,10 @@ class Invader:
         self.bulletsize = 10
         self.bullets = []
 
-    def event(self, event):
+    def event(self, event: pygame.event.EventType) -> None:
         pass
 
-    def update(self, speed):
+    def update(self, speed: pygame.Surface) -> None:
         self.x += speed
 
         r = random.random()
@@ -89,11 +90,11 @@ class Invader:
 
         self.remove()
 
-    def render(self, screen):
+    def render(self, screen: pygame.Surface) -> None:
         for bullet in self.bullets:
             bullet.render(screen)
 
         screen.blit(self.img, (self.x - self.size[0] // 2, self.y - self.size[1] // 2))
 
-    def remove(self):
+    def remove(self) -> None:
         self.bullets = [bullet for bullet in self.bullets if not bullet.out]

@@ -6,7 +6,11 @@ from states import GameStateManager
 
 
 class Game:
-    def __init__(self, w, h):
+    """
+        Game class for Space Invaders
+    """
+
+    def __init__(self, w: int, h: int) -> None:
         self.width = w
         self.height = h
 
@@ -18,24 +22,36 @@ class Game:
 
         self.BACKGROUND = (0, 0, 0)
 
-    def event(self):
+    def event(self) -> None:
+        """
+            Event
+        """
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 self.close()
 
             self.gsm.active.event(event)
 
-    def update(self):
+    def update(self) -> None:
+        """
+            Update
+        """
+
         if self.gsm.close:
             self.close()
 
         self.gsm.active.update()
 
 
-    def render(self, screen):
+    def render(self, screen) -> None:
         self.gsm.active.render(screen)
 
-    def run(self):
+    def run(self) -> None:
+        """
+            Game loop
+        """
+
         while True:
             self.screen.fill(self.BACKGROUND)
 
@@ -48,7 +64,7 @@ class Game:
             pygame.display.flip()
             self.clock.tick(self.fps)
 
-    def close(self):
+    def close(self) -> None:
         pygame.quit()
         sys.exit()
 

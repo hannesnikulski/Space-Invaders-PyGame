@@ -1,12 +1,12 @@
 import pygame
 
 from bullet import Bullet
-
+from typing import List
 from pygame.locals import QUIT, K_LEFT, K_RIGHT, K_SPACE, KEYDOWN, KEYUP
 
 
 class Player:
-    def __init__(self, x, y, width):
+    def __init__(self, x: int, y: int, width: int) -> None:
         self.x = x
         self.y = y
         self.width = width
@@ -25,7 +25,7 @@ class Player:
         self.bulletsize = 10
         self.bullets = []
 
-    def event(self, event):
+    def event(self, event: pygame.event.EventType) -> None:
         if event.type == KEYDOWN:
             if event.key == K_LEFT:
                 self.left = True
@@ -43,7 +43,7 @@ class Player:
             elif event.key == K_RIGHT:
                 self.right = False
 
-    def update(self):
+    def update(self) -> None:
         if self.left and self.x > self.size[0] // 2:
             self.x -= self.speed
         
@@ -61,16 +61,16 @@ class Player:
 
         self.remove()
 
-    def render(self, screen):
+    def render(self, screen: pygame.Surface) -> None:
         screen.blit(self.img, (self.x - self.size[0] // 2, self.y - self.size[1] // 2))
 
         for bullet in self.bullets:
             bullet.render(screen)
 
-    def remove(self):
+    def remove(self) -> None:
         self.bullets = [bullet for bullet in self.bullets if not bullet.out]
 
-    def is_hit(self, bullets):
+    def is_hit(self, bullets: List[int]) -> bool:
         for bullet in bullets:
             
             if self.y < bullet.y + (bullet.size + self.size[0]) // 2 < self.y + self.size[0] and \
