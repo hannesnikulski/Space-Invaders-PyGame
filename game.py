@@ -1,3 +1,4 @@
+import random
 import sys
 import pygame
 
@@ -44,8 +45,8 @@ class Game:
         self.gsm.active.update()
 
 
-    def render(self, screen) -> None:
-        self.gsm.active.render(screen)
+    def render(self) -> None:
+        self.gsm.active.render(self.screen)
 
     def run(self) -> None:
         """
@@ -59,7 +60,7 @@ class Game:
 
             self.update()
             
-            self.render(self.screen)
+            self.render()
 
             pygame.display.flip()
             self.clock.tick(self.fps)

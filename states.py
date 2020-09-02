@@ -59,10 +59,16 @@ class PlayState:
         self.enemy.event(event)
 
     def update(self) -> None:
+        if len(self.enemy.invaders) == 0:
+            self.gsm.menu()            
+
         if self.enemy.is_hit(self.player.bullets):
             self.player.score += 10
 
         for invader in self.enemy.invaders:
+            if invader.y > self.player.y - self.player.size[1] // 2:
+                self.gsm.game_over()
+
             if self.player.is_hit(invader.bullets):
                 if self.player.lives == 0:
                     self.gsm.game_over()
@@ -103,6 +109,8 @@ class PauseState:
             widget.update()
 
     def render(self, screen: pygame.Surface) -> None:
+        self.gsm.play_state.render(screen)
+
         for widget in self.widgets:
             widget.render(screen)
 
@@ -164,6 +172,8 @@ class GameOverState:
             widget.update()
 
     def render(self, screen):
+        self.gsm.play_state.render(screen)
+
         for widget in self.widgets:
             widget.render(screen)
 
