@@ -52,7 +52,7 @@ class Player:
             
         if self.space:
             self.bullets.append(
-                Bullet(self.x - self.bulletsize // 2, self.y - self.size[1] // 2, self.bulletsize, 2 * self.speed)
+                Bullet(self.x, self.y - self.size[1] // 2, self.bulletsize, 2 * self.speed)
             )
             self.space = False
 
